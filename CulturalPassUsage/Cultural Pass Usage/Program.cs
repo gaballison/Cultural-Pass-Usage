@@ -7,7 +7,9 @@ namespace Cultural_Pass_Usage
 {
     class Program
     {
-        public readonly string _line = "------------------------------------------------------------------------------------------";
+        public static bool success = false;
+        public static readonly string line = "------------------------------------------------------------------------------------------";
+
 
         static void Main(string[] args)
         {
@@ -29,43 +31,49 @@ namespace Cultural_Pass_Usage
             Console.WriteLine();
 
             // create array of venues with each venue at the position of counter-1
-            string[] venueByID = new string[venueCount];
+            Venue[] venueByID = new Venue[venueCount];
 
             foreach (var venue in venues)
             {
                 Console.WriteLine(counter + ". " + venue.Name);
                 int cID = counter - 1;
-                venueByID[cID] = venue.Name;
+                venueByID[cID] = venue;
                 counter++;
             }
 
             Console.WriteLine();
             Console.Write("Enter the list number of the venue you would like to see:  ");
             string input = Console.ReadLine();
+            int i = 1;
 
-            int result = 0;
+            do
+            {
+                var parsed = Parsed(input);
+                if (parsed > 0 && parsed <= venueCount)
+                {
+                    // make method to write out all of the venue stuff
+                    venueByID[parsed].WriteDesc();
+                    //Console.WriteLine($"Attempt #{i}: Huzzah, we're good! ");
+                    success = true;
+                }
+                else
+                {
+                    Console.Write($"Attempt #{i}: That isn't a valid selection. Please try again or type \"x\" to exit:  ");
+                    success = false;
+                    input = Console.ReadLine();
+                    i++;
+                    if (input == "x")
+                    {
+                        Environment.Exit(0);
+                    }
+                    continue;
+                }
 
-            if (Int32.TryParse(input, out int numValue))
-            {
-                result = numValue;
             }
-            else
-            {
-                Console.WriteLine($"You entered '{input}', which isn't a number. Try again: ");
-                string input2 = Console.ReadLine();
-            }
+            while (success == false);
+
 
             Console.WriteLine();
-
-            for (var i = 0; i < venueCount; i++)
-            {
-                if ((result - 1) == i)
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine(venueByID[i]);
-                    Console.WriteLine("Description:  [how do you refer to a property from an object in a list??]");
-                }
-            }
 
             Console.ReadLine();
         }
@@ -81,6 +89,48 @@ namespace Cultural_Pass_Usage
             }
             return venues;
         }
+
+        public static void SerializeVenueToFile(List<Venue> venues, string fileName)
+        {
+            var serializer = new JsonSerializer();
+            using (var writer = new StreamWriter(fileName))
+            using (var jsonWriter = new JsonTextWriter(writer))
+            {
+                serializer.Serialize(jsonWriter, venues);
+            }
+        }
+
+        public static int Parsed(string input)
+        {
+            if (Int32.TryParse(input, out int number))
+            {
+                return number;
+            }
+            return -1;
+        }
+
+        public static int GetInt(string input, int limit)
+        {
+            bool success = Int32.TryParse(input, out int number);
+
+            if (success && number <= limit && number > 0)
+            {
+                return number;
+            }
+            else if (success && ( (number > limit) || (number < 0) ) )
+            {
+                Console.WriteLine("That number is not a valid selection. Try again: ");
+            }
+            else
+            {
+                Console.WriteLine("That isn't even a number. Try again: ");
+            }
+
+            return 0;
+        }
+
+
+
 
         public static void PrintTitle()
         {
