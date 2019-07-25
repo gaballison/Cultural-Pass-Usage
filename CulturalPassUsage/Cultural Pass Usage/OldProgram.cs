@@ -5,77 +5,68 @@ using Newtonsoft.Json;
 
 namespace Cultural_Pass_Usage
 {
-    class Program
+    class OldProgram
     {
-        //public static bool success = false;
+        public static bool success = false;
         public static readonly string line = "------------------------------------------------------------------------------------------";
 
 
-        static void Main(string[] args)
+        static void OldMain(string[] args)
         {
-            // print the prettyfied title
+            // PrintTitle();
             Title title = new Title();
             title.PrintTitle();
 
-            // create variable for current directory + input file path
             string currentDirectory = Directory.GetCurrentDirectory();
             DirectoryInfo directory = new DirectoryInfo(currentDirectory);
 
             var fileName = Path.Combine(directory.FullName, "CulturalPassVenues2019.json");
 
-            // Deserialize data from JSON file into array of objects
             var venues = DeserializeVenues(fileName);
-
             int venueCount = venues.Count;
             int counter = 1;
 
-            // printing out general info
+
             PrintBoxTop();
             Console.WriteLine("|  There are *" + venueCount + "* venues participating this year:                                            |");
             PrintBoxBottom();
             Console.WriteLine();
 
-            // create a numerical list of venues -- might be able to do with just using ID?
+            // create array of venues with each venue at the position of counter-1
+            Venue[] venueByID = new Venue[venueCount];
+
             foreach (var venue in venues)
             {
                 Console.WriteLine(counter + ". " + venue.Name);
+                int cID = counter - 1;
+                venueByID[cID] = venue;
                 counter++;
             }
 
             Console.WriteLine();
             Console.Write("Enter the list number of the venue you would like to see:  ");
             string input = Console.ReadLine();
-            int parsedInput = Parsed(input);
 
-            // using Find method to search for input match in the List of Venues
-            Venue result = venues.Find(
-                delegate (Venue ex)
-                {
-                    return ex.ID == parsedInput;
-                }
-                );
 
-            var outputFileName = Path.Combine(directory.FullName, "UpdatedCulturalPassVenues2019.json");
-            if (result != null)
-            {
-                DisplayResult(result);
+            //while (selection.success)
+            //{
+            //    Console.Write("Enter the number of another venue you'd like to see, or type \"x\" to quit: ");
+            //    string input2 = Console.ReadLine();
 
-                // get user input to determine next action
-                Console.WriteLine("Would you like to: \n\t1. Modify this information \n\t2. Exit\n");
-                string proceed = Console.ReadLine();
-                if (Parsed(proceed) == 2)
-                {
-                    Environment.Exit(0);
-                }
-                else
-                {
-                    Console.WriteLine("This part is coming next...");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"\nID# {parsedInput} not found");
-            }
+            //    if (input2.ToLowerInvariant() == "x")
+            //    {
+            //        Environment.Exit(0);
+            //    }
+            //    else
+            //    {
+            //        VenueDesc selection2 = new VenueDesc(input2, venueCount, venueByID);
+            //        continue;
+            //    }
+            //}
+
+
+
+            Console.WriteLine();
 
             Console.ReadLine();
         }
@@ -102,20 +93,43 @@ namespace Cultural_Pass_Usage
             }
         }
 
-        public static int Parsed(string input)
-        {
-            if (Int32.TryParse(input, out int number))
-            {
-                return number;
-            }
-            return -1;
-        }
+        //public static int Parsed(string input)
+        //{
+        //    if (Int32.TryParse(input, out int number))
+        //    {
+        //        return number;
+        //    }
+        //    return -1;
+        //}
 
-        private static void DisplayResult(Venue result)
-        {
-            Console.WriteLine();
-            result.WriteDesc();
-        }
+        //public static void GetDesc (string input, int limit, Venue[] venueArray)
+        //{
+        //    int i = 1;
+        //    do
+        //    {
+        //        var parsed = Parsed(input);
+        //        if (parsed > 0 && parsed <= limit)
+        //        {
+        //            // keep getting out of bounds exception, not sure why...
+        //            venueArray[parsed].WriteDesc();
+        //            success = true;
+        //        }
+        //        else
+        //        {
+        //            Console.Write($"Attempt #{i}: That isn't a valid selection. Please try again or type \"x\" to exit:  ");
+        //            success = false;
+        //            input = Console.ReadLine();
+        //            i++;
+        //            if (input.ToLowerInvariant() == "x")
+        //            {
+        //                Environment.Exit(0);
+        //            }
+        //            continue;
+        //        }
+
+        //    }
+        //    while (success == false);
+        //}
 
         public static void PrintBoxTop()
         {
@@ -128,6 +142,6 @@ namespace Cultural_Pass_Usage
             Console.WriteLine("|___________________________________________________________________________________________|");
         }
 
-        
+
     }
 }

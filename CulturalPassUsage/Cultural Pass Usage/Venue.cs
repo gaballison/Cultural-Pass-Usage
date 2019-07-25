@@ -71,7 +71,7 @@ namespace Cultural_Pass_Usage
 
             Console.WriteLine("");
             Console.WriteLine(line);
-            Console.WriteLine(Name.ToUpperInvariant());
+            Console.WriteLine($"#{ID}. {Name.ToUpperInvariant()}");
             Console.WriteLine();
             Console.WriteLine($"\"{Description}\"");
             Console.WriteLine();
@@ -79,7 +79,12 @@ namespace Cultural_Pass_Usage
             Console.WriteLine();
             Console.WriteLine($"Recommended for ages {Youngest} to {Oldest}");
             Console.WriteLine(line);
+            Console.WriteLine();
         }
+
+        
+
+        
 
     }
 }
