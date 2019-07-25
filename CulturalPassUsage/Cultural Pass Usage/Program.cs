@@ -62,20 +62,39 @@ namespace Cultural_Pass_Usage
                 DisplayResult(result);
 
                 // get user input to determine next action
-                Console.WriteLine("Would you like to: \n\t1. Modify this venue \n\t2. Add another venue\n\t3. (or any other key) Exit\n");
+                Console.WriteLine("Would you like to: \n\t1. Modify this venue \n\t2. Remove this venue \n\t3. Add another venue\n\t4. (or any other key) Exit\n");
                 string proceed = Console.ReadLine();
                 if (Parsed(proceed) == 1)
                 {
+                    Console.WriteLine($"You want to modify {result.Name}");
                     // methods to modify venue
-                    ModifyVenueProp(result, "Name");
-                    ModifyVenueProp(result, "Description");
-                    ModifyVenueProp(result, "AvailabilityDesc");
-                    ModifyVenueProp(result, "Youngest");
-                    ModifyVenueProp(result, "Oldest");
+                    // create array of properties, loop through them and call method on each
+                    // it would be easier to just delete things
                 }
                 else if (Parsed(proceed) == 2)
                 {
+                    // create method to delete venue
+                    Console.Write($"You want to delete {result.Name}; are you sure? Y/N \t");
+                    string deleteConf = Console.ReadLine();
+                    if(deleteConf.ToUpperInvariant() == "Y")
+                    {
+                        var tIndex = venues.IndexOf(result);
+                        Console.WriteLine($"{result.Name} has an index of {tIndex}");
+                        venues.RemoveAt(tIndex);
+                        string newName = venues[tIndex].Name;
+                        Console.WriteLine($"Successfully removed Venues[{tIndex}]:{result.Name}; \t {newName} is now at position {tIndex}");
+                        //int tempCount = 0;
+                        foreach(Venue venus in venues)
+                        {
+                            int index = venues.IndexOf(venus);
+                            Console.WriteLine($"venues[{index} = {venus.Name}");
+                        }
+                    }
+                }
+                else if (Parsed(proceed) == 3)
+                {
                     // create method to add venue
+                    Console.WriteLine("You want to add a new venue, how ambitious!");
                 }
                 else
                 {
@@ -165,18 +184,20 @@ namespace Cultural_Pass_Usage
             Console.Write($"Enter a new {printPropName} (or hit enter to continue):  ");
             string newProp = Console.ReadLine();
             var oldProp = t.GetProperty(propName).GetValue(obj);
-
-            if (newProp != null || Console.ReadKey().Key != ConsoleKey.Enter)
+            //ConsoleKeyInfo cki;
+            ConsoleKeyInfo temp = Console.ReadKey(true);
+            Console.TreatControlCAsInput = false;
+            if (temp.Key == ConsoleKey.Enter)
+            {
+                Console.WriteLine($"\nOld {printPropName}: {oldProp}\tNothing changed.");
+            }
+            else
             {
                 t.GetProperty(propName).SetValue(obj, newProp);
                 var newPropVal = t.GetProperty(propName).GetValue(obj);
                 Console.WriteLine($"\nOld {printPropName}: {oldProp}\n\tNew value: {newPropVal}\n");
+            }
 
-            }
-            else
-            {
-                Console.WriteLine($"\nOld {printPropName}: {oldProp}\tNothing changed.");
-            }
         }
 
         public static void PrintBoxTop()

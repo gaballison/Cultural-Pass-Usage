@@ -1,11 +1,6 @@
 # Cultural Pass Usage
 
-A C# console app designed to allow users to view information about the 2019 [Cultural Pass](https://fundforthearts.org/culturalpass/) venues, including statistics about the number of visitors from the [Jeffersonville Township Public Library](https://jefflibrary.org). Users will have the option to add or remove Cultural Pass numbers, edit information about Venues, and create individual Venue CSV files needed to upload into [Beanstack](https://beanstack.com) in order to give Readers their badge credit for visiting the venue.  
+A C# console app designed to allow users to view and modify information about the 2019 [Cultural Pass](https://fundforthearts.org/culturalpass/) venues. It uses [Json.net](https://newtonsoft.com/json) to serialize and deserialize data from a Json file containing information about each Venue.
 
-## File Input
-
-The app will use/require 3 files:
-
-* CSV listing all Cultural Pass numbers in Beanstack (from Beanstack's `Program Reports: Readers (All Registered Readers)` report for the 2019 Cultural Pass program)
-* JSON file listing all Venues, including Badge ID number
-* CSV of all Cultural Pass Numbers logged at each Venue
+## Future Plans
+I didn't have time to make this as robust as I'd hoped, but I would like to enhance it with options to generate the CSV files necessary for reporting in [Beanstack](https://beanstack.com).
