@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Cultural_Pass_Usage
@@ -61,15 +62,24 @@ namespace Cultural_Pass_Usage
                 DisplayResult(result);
 
                 // get user input to determine next action
-                Console.WriteLine("Would you like to: \n\t1. Modify this information \n\t2. Exit\n");
+                Console.WriteLine("Would you like to: \n\t1. Modify this venue \n\t2. Add another venue\n\t3. (or any other key) Exit\n");
                 string proceed = Console.ReadLine();
-                if (Parsed(proceed) == 2)
+                if (Parsed(proceed) == 1)
                 {
-                    Environment.Exit(0);
+                    // methods to modify venue
+                    ModifyVenueProp(result, "Name");
+                    ModifyVenueProp(result, "Description");
+                    ModifyVenueProp(result, "AvailabilityDesc");
+                    ModifyVenueProp(result, "Youngest");
+                    ModifyVenueProp(result, "Oldest");
+                }
+                else if (Parsed(proceed) == 2)
+                {
+                    // create method to add venue
                 }
                 else
                 {
-                    Console.WriteLine("This part is coming next...");
+                    Environment.Exit(0);
                 }
             }
             else
@@ -115,6 +125,58 @@ namespace Cultural_Pass_Usage
         {
             Console.WriteLine();
             result.WriteDesc();
+        }
+
+        //TODO: Add better input cleaning/verification for modification
+        public static void ModifyVenueProp(Venue inputObject, string propName)
+        {
+            Venue obj = new Venue();
+            Type t = obj.GetType();
+            Type y = inputObject.GetType();
+            PropertyInfo[] props = t.GetProperties();
+
+            //Console.WriteLine("Properties (N = {0}):", props.Length);
+            foreach (var prop in props)
+            {
+                var oldValue = prop.GetValue(obj);
+                prop.SetValue(obj, y.GetProperty(prop.Name).GetValue(inputObject));
+                var newValue = prop.GetValue(obj);
+                // Console.WriteLine($"{prop.Name} was {oldValue} and now is {newValue}");
+            }
+
+            string printPropName = null;
+
+            switch (propName)
+            {
+                case "AvailabilityDesc":
+                    printPropName = "Availability Description";
+                    break;
+                case "Youngest":
+                    printPropName = "Youngest Age";
+                    break;
+                case "Oldest":
+                    printPropName = "Oldest Age";
+                    break;
+                default:
+                    printPropName = propName;
+                    break;
+            }
+
+            Console.Write($"Enter a new {printPropName} (or hit enter to continue):  ");
+            string newProp = Console.ReadLine();
+            var oldProp = t.GetProperty(propName).GetValue(obj);
+
+            if (newProp != null || Console.ReadKey().Key != ConsoleKey.Enter)
+            {
+                t.GetProperty(propName).SetValue(obj, newProp);
+                var newPropVal = t.GetProperty(propName).GetValue(obj);
+                Console.WriteLine($"\nOld {printPropName}: {oldProp}\n\tNew value: {newPropVal}\n");
+
+            }
+            else
+            {
+                Console.WriteLine($"\nOld {printPropName}: {oldProp}\tNothing changed.");
+            }
         }
 
         public static void PrintBoxTop()
