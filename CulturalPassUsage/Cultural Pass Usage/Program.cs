@@ -48,7 +48,7 @@ namespace Cultural_Pass_Usage
                 result.WriteDesc();
 
                 // get user input to determine next action
-                Console.WriteLine("Would you like to: \n\t1. Remove this venue \n\t2. Exit");
+                Console.WriteLine("Would you like to: \n\t1. Remove this venue \n\t2. Add new venue \n\t3. Exit");
                 string proceed = Console.ReadLine();
 
                 //------------------------------------------
@@ -60,6 +60,10 @@ namespace Cultural_Pass_Usage
                 {
                     // confirm they really do want to delete the item, then delete and save or quit
                     Delete(venues, result, parsedInput);
+                }
+                else if (Parsed(proceed) == 2)
+                {
+                    Add(venues);
                 }
                 else
                 {
@@ -161,6 +165,55 @@ namespace Cultural_Pass_Usage
 
             }
         }
+        public static void Add(List<Venue> venues)
+        {
+            int count = venues.Count;
+            int lastIndex = count - 1;
+
+            int lastID = venues[lastIndex].ID;
+
+            Venue obj = new Venue();
+            Type t = obj.GetType();
+            PropertyInfo[] props = t.GetProperties();
+
+            foreach(var prop in props)
+            {
+                switch(prop.Name)
+                {
+                    case "Name":
+                        Console.Write("Enter the new venue's Name:  ");
+                        obj.Name = Console.ReadLine();
+                        break;
+                    case "ID":
+                        obj.ID = lastID + 1;
+                        break;
+                    case "Description":
+                        Console.Write("Enter the new venue's Description:  ");
+                        obj.Description = Console.ReadLine();
+                        break;
+                    case "Category":
+                        Console.Write("Enter the new venue's Category:  ");
+                        obj.Category = Console.ReadLine();
+                        break;
+                    case "AvailabilityDesc":
+                        Console.Write("Enter the new venue's Availability Description (e.g. days and hours open):  ");
+                        obj.AvailabilityDesc = Console.ReadLine();
+                        break;
+                    case "Youngest":
+                        Console.Write("Enter the new venue's YOUNGEST Recommended Age:  ");
+                        obj.Youngest = Parsed(Console.ReadLine());
+                        break;
+                    case "Oldest":
+                        Console.Write("Enter the new venue's OLDEST Recommended Age:  ");
+                        obj.Oldest = Parsed(Console.ReadLine());
+                        break;
+                    default:
+                        break;
+                } // end switch 
+            }
+            venues.Add(obj);
+        }
+
         public static Venue FindByID(List<Venue> venues, int parsedInput)
         {
             // find and return the first object whose ID matches the user's selection
@@ -184,7 +237,6 @@ namespace Cultural_Pass_Usage
             return -1;
         }
 
-
         public static void PrintBoxTop()
         {
             Console.WriteLine(" ___________________________________________________________________________________________");
@@ -194,8 +246,6 @@ namespace Cultural_Pass_Usage
         public static void PrintBoxBottom()
         {
             Console.WriteLine("|___________________________________________________________________________________________|");
-        }
-
-        
+        }  
     }
 }
