@@ -6,23 +6,6 @@
         "description": "Art is everywhere at 21c. Follow the clues on our iSPY game to see if you can ﬁnd all of the artworks; immerse yourself in the art of the 21st century and enjoy works by local artists in Labor&Materials, and our other exhibitions.",
         "category": "Museum",
         "availability_desc" : "Open 24/7; Guided tours most Wednesdays and Fridays, 5p; and June 11; July 9; August 6, 13, 11:30a",
-        "availability_recurring" : true,
-        "availability_recurring_schedule" : {
-            "monday" : { "open" : false, "start_time" : null, "end_time" : null},
-            "tuesday" : { "open" : false, "start_time" : null, "end_time" : null},
-            "wednesday" : { "open" : true, "start_time" : 1700, "end_time" : null},
-            "thursday" : { "open" : false, "start_time" : null, "end_time" : null},
-            "friday" :  { "open" : true, "start_time" : 1700, "end_time" : null},
-            "saturday" : { "open" : false, "start_time" : null, "end_time" : null},
-            "sunday" : { "open" : false, "start_time" : null, "end_time" : null}
-        } ,
-        "availability_static" : true, 
-        "availability_static_schedule" : [
-            { "date" : "2019-06-11", "start_time" : 1130, "end_time" : null },
-            { "date" : "2019-07-09", "start_time" : 1130, "end_time" : null },
-            { "date" : "2019-08-09", "start_time" : 1130, "end_time" : null },
-            { "date" : "2019-08-13", "start_time" : 1130, "end_time" : null }
-        ],
         "recommended_age_youngest" : 0,
         "recommended_age_oldest" : 21
     },
@@ -33,26 +16,6 @@
         "description" : "A 30-minute sneak peek behind-the-scenes tour through an interactive onstage demonstration. Includes a variety of hands-on activities that engage kids of all ages in the exciting world of theatre.",
         "category": "Museum",
         "availability_desc": "July 24, 26, 27, every 30 minutes 10a-1:30p",
-        "availability_recurring": false,
-        "availability_recurring_schedule": null,
-        "availability_static": true,
-        "availability_static_schedule": [
-            {
-                "date": "2019-07-24",
-                "start_time": 1000,
-                "end_time": 1330
-            },
-            {
-                "date": "2019-07-26",
-                "start_time": 1000,
-                "end_time": 1330
-            },
-            {
-                "date": "2019-07-27",
-                "start_time": 1000,
-                "end_time": 1330
-            }
-        ],
         "recommended_age_youngest" : 0,
         "recommended_age_oldest" : 21
     },
@@ -63,47 +26,77 @@
         "description" : "The interactive museum explores how ingenuity and determination combine to overcome vision loss.  A tour of the factory demonstrates the making of braille, large type, audio books, and educational aids.",
         "category": "Museum",
         "availability_desc": "Mondays through Fridays, 8:30a-4p, Sat 10a-3p;  Factory Tours, Mondays through Thursdays, 10a and 2p",
-        "availability_recurring": true,
-        "availability_recurring_schedule": {
-            "monday": {
-                "open": true,
-                "start_time": 830,
-                "end_time": 1600
-            },
-            "tuesday": {
-                "open": true,
-                "start_time": 830,
-                "end_time": 1600
-            },
-            "wednesday": {
-                "open": true,
-                "start_time": 830,
-                "end_time": 1600
-            },
-            "thursday": {
-                "open": true,
-                "start_time": 830,
-                "end_time": 1600
-            },
-            "friday": {
-                "open": true,
-                "start_time": 830,
-                "end_time": 1600
-            },
-            "saturday": {
-                "open": true,
-                "start_time": 1000,
-                "end_time": 1500
-            },
-            "sunday": {
-                "open": false,
-                "start_time": null,
-                "end_time": null
-            }
-        },
-        "availability_static": false,
-        "availability_static_schedule": null,
         "recommended_age_youngest" : 6,
         "recommended_age_oldest" : 21
+    },
+    {
+        "id": 4,
+        "name": "Arts Alliance of Southern Indiana",
+        "badge_id": 5292,
+        "description": "Gallery in the historic district of New Albany, showcasing child-friendly work. Each Saturday will have a craft, talk or activity.",
+        "category": "Art Gallery",
+        "availability_desc": "Saturdays, 11a-2p",
+        "recommended_age_youngest": 6,
+        "recommended_age_oldest": 21
+    },
+    {
+        "id": 5,
+        "name": "ArtSeed",
+        "badge_id": 10694,
+        "description": "Local artist-owned and operated gallery in New Albany, showcasing an artist members’ exhibit called Celebration of Family.",
+        "category": "Art Gallery",
+        "availability_desc": "Fridays, 10a-5p",
+        "recommended_age_youngest": 0,
+        "recommended_age_oldest": 21
+    },
+    {
+        "id": 6,
+        "name": "Asia Institute, Inc.",
+        "badge_id": 5269,
+        "description": "Access to two art exhibits, Rivers and Teas of Asia, with themed hands-on activities.",
+        "category": "Art Gallery",
+        "availability_desc": "Fridays, 1p-4p (starts June 7th)",
+        "recommended_age_youngest": 7,
+        "recommended_age_oldest": 21
+    },
+    {
+        "id": 7,
+        "name": "Bernheim Arboretum and Research Forest",
+        "badge_id": 5271,
+        "description": "Have a GIANT adventure as you hike through Bernheim to ﬁnd Mama Loumari, Little Nis, and Little Elina – our family of Forest Giants in a Giant Forest. Start at the Visitor Center for your stamp and a map.",
+        "category": "Arboretum",
+        "availability_desc": "Sundays through Saturdays, 9a-5p",
+        "recommended_age_youngest": 0,
+        "recommended_age_oldest": 21
+    },
+    {
+        "id": 8,
+        "name": "Bullitt County Public Library",
+        "badge_id": 5293,
+        "description": "SummerQuest – Enjoy events and reading  challenges for all ages.",
+        "category": "Public Library",
+        "availability_desc": "Through July 27",
+        "recommended_age_youngest": 0,
+        "recommended_age_oldest": 19
+    }
+    {
+        "id": 9,
+        "name": "Carnegie Center for Art and History",
+        "badge_id": 5272,
+        "description": "A regional art and history museum with hands-on activities in charming New Albany, featuring the Men & Women of the Underground Railroad exhibit.",
+        "category": "Museum",
+        "availability_desc": "July 20, 10a-1p; and Tuesdays through Saturdays, 10a-5:30p",
+        "recommended_age_youngest": 0,
+        "recommended_age_oldest": 21
+    },
+    {
+        "id": 10,
+        "name": "Charlestown-Clark County Public Library",
+        "badge_id": 10699,
+        "description": "A Universe of Stories – Summer Reading Program & Activities. ",
+        "category": "Public Library",
+        "availability_desc": "June 1 through August 1 ",
+        "recommended_age_youngest": 0,
+        "recommended_age_oldest": 21
     }
 ]
