@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Linq;
 using Newtonsoft.Json;
 using System.Collections;
-using System.Linq.Expressions;
+
 
 namespace Cultural_Pass_Usage
 {
@@ -15,7 +14,7 @@ namespace Cultural_Pass_Usage
         public Venue[] Venue { get; set; }
     }
 
-    public class Venue : IEquatable<Venue>, IComparable<Venue>, IQueryable<Venue>
+    public class Venue : IEquatable<Venue>, IComparable<Venue>
     {
         
         // Deserializing the JSON data 
@@ -50,13 +49,7 @@ namespace Cultural_Pass_Usage
         [JsonProperty(PropertyName = "recommended_age_oldest")]
         public int Oldest { get; set; }
 
-        public Type ElementType => throw new NotImplementedException();
-
-        public Expression Expression => throw new NotImplementedException();
-
-        public IQueryProvider Provider => throw new NotImplementedException();
-
-
+        
         // Need to implement custom Equals method in order to use Contains method
         public override bool Equals(object obj)
         {
@@ -163,14 +156,14 @@ namespace Cultural_Pass_Usage
             }
         }
 
-        public IEnumerator<Venue> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        //public IEnumerator<Venue> GetEnumerator()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        //IEnumerator IEnumerable.GetEnumerator()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

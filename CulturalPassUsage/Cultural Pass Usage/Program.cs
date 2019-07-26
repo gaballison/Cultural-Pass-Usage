@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Linq;
 using Newtonsoft.Json;
 
 namespace Cultural_Pass_Usage
@@ -38,7 +37,6 @@ namespace Cultural_Pass_Usage
             Console.WriteLine();
 
             // create a numerical list of venues -- might be able to do with just using ID?
-           // venues.Sort();
             foreach (var venue in venues)
             {
                 Console.WriteLine(counter + ". " + venue.Name);
@@ -51,12 +49,8 @@ namespace Cultural_Pass_Usage
             int parsedInput = Parsed(input);
 
             // using Find method to search for input match in the List of Venues
-            Venue result = venues.Find(
-                delegate (Venue ex)
-                {
-                    return ex.ID == parsedInput;
-                }
-                );
+            Venue result = FindByID(venues, parsedInput);
+
 
             var outputFileName = Path.Combine(directory.FullName, "UpdatedCulturalPassVenues2019.json");
             if (result != null)
@@ -64,7 +58,7 @@ namespace Cultural_Pass_Usage
                 DisplayResult(result);
 
                 // get user input to determine next action
-                Console.WriteLine("Would you like to: \n\t1. Modify this venue \n\t2. Remove this venue \n\t3. Add another venue\n\t4. (or any other key) Exit\n");
+                Console.WriteLine("Would you like to: \n\t1. Modify this venue \n\t2. Remove this venue \n\t3. Add another venue\n\t4. <ENTER> (or any other key) Exit\n");
                 string proceed = Console.ReadLine();
                 if (Parsed(proceed) == 1)
                 {
@@ -80,36 +74,23 @@ namespace Cultural_Pass_Usage
                     string deleteConf = Console.ReadLine();
                     if(deleteConf.ToUpperInvariant() == "Y")
                     {
-                        Console.WriteLine("You've opted to delete {0}. Some magic will happen behind the scenes to make that happen", result.Name);
+                        venues.Remove(new Venue() { ID = result.ID, Name = result.Name }) ;
 
-                        venues.RemoveAll(x => x.Contains(result));
+                        Venue newResult = FindByID(venues, parsedInput);
 
-                        Venue newResult = venues.Find(
-                            delegate (Venue ex)
-                                {
-                                    return ex.ID == parsedInput;
-                                }
-                           );
                         if(newResult != null)
                         {
                             Console.WriteLine("We still found that object, that's not good.");
                         }
                         else
                         {
-                            Console.WriteLine("SUCCESS! Object deleted.");
+                            Console.WriteLine("SUCCESS! Object deleted. Venues now contains: ");
+                            foreach(Venue venue in venues)
+                            {
+                                Console.WriteLine("ID: {0} \tName: {1}", venue.ID, venue.Name);
+                            }
                         }
-                        // DELETE stuff that doesn't work properly
-                        //var tIndex = venues.IndexOf(result);
-                        //Console.WriteLine($"{result.Name} has an index of {tIndex}");
-                        //venues.RemoveAt(tIndex);
-                        //string newName = venues[tIndex].Name;
-                        //Console.WriteLine($"Successfully removed Venues[{tIndex}]:{result.Name}; \t {newName} is now at position {tIndex}");
-                        ////int tempCount = 0;
-                        //foreach(Venue venus in venues)
-                        //{
-                        //    int index = venues.IndexOf(venus);
-                        //    Console.WriteLine($"venues[{index} = {venus.Name}");
-                        //}
+                        
                     }
                 }
                 else if (Parsed(proceed) == 3)
@@ -129,6 +110,7 @@ namespace Cultural_Pass_Usage
 
             Console.ReadLine();
         }
+        // END OF MAIN PROGRAM
 
         public static List<Venue> DeserializeVenues(string fileName)
         {
@@ -150,6 +132,18 @@ namespace Cultural_Pass_Usage
             {
                 serializer.Serialize(jsonWriter, venues);
             }
+        }
+
+        public static Venue FindByID(List<Venue> venues, int parsedInput)
+        {
+            Venue result = venues.Find(
+                delegate (Venue ex)
+                {
+                    return ex.ID == parsedInput;
+                }
+                );
+
+            return result;
         }
 
         public static int Parsed(string input)
