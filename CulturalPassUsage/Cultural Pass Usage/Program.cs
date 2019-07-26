@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Cultural_Pass_Usage
@@ -37,6 +38,7 @@ namespace Cultural_Pass_Usage
             Console.WriteLine();
 
             // create a numerical list of venues -- might be able to do with just using ID?
+           // venues.Sort();
             foreach (var venue in venues)
             {
                 Console.WriteLine(counter + ". " + venue.Name);
@@ -66,7 +68,7 @@ namespace Cultural_Pass_Usage
                 string proceed = Console.ReadLine();
                 if (Parsed(proceed) == 1)
                 {
-                    Console.WriteLine($"You want to modify {result.Name}");
+                    Console.WriteLine($"You want to MODIFY {result.Name}");
                     // methods to modify venue
                     // create array of properties, loop through them and call method on each
                     // it would be easier to just delete things
@@ -78,23 +80,42 @@ namespace Cultural_Pass_Usage
                     string deleteConf = Console.ReadLine();
                     if(deleteConf.ToUpperInvariant() == "Y")
                     {
-                        var tIndex = venues.IndexOf(result);
-                        Console.WriteLine($"{result.Name} has an index of {tIndex}");
-                        venues.RemoveAt(tIndex);
-                        string newName = venues[tIndex].Name;
-                        Console.WriteLine($"Successfully removed Venues[{tIndex}]:{result.Name}; \t {newName} is now at position {tIndex}");
-                        //int tempCount = 0;
-                        foreach(Venue venus in venues)
+                        Console.WriteLine("You've opted to delete {0}. Some magic will happen behind the scenes to make that happen", result.Name);
+
+                        venues.RemoveAll(x => x.Contains(result));
+
+                        Venue newResult = venues.Find(
+                            delegate (Venue ex)
+                                {
+                                    return ex.ID == parsedInput;
+                                }
+                           );
+                        if(newResult != null)
                         {
-                            int index = venues.IndexOf(venus);
-                            Console.WriteLine($"venues[{index} = {venus.Name}");
+                            Console.WriteLine("We still found that object, that's not good.");
                         }
+                        else
+                        {
+                            Console.WriteLine("SUCCESS! Object deleted.");
+                        }
+                        // DELETE stuff that doesn't work properly
+                        //var tIndex = venues.IndexOf(result);
+                        //Console.WriteLine($"{result.Name} has an index of {tIndex}");
+                        //venues.RemoveAt(tIndex);
+                        //string newName = venues[tIndex].Name;
+                        //Console.WriteLine($"Successfully removed Venues[{tIndex}]:{result.Name}; \t {newName} is now at position {tIndex}");
+                        ////int tempCount = 0;
+                        //foreach(Venue venus in venues)
+                        //{
+                        //    int index = venues.IndexOf(venus);
+                        //    Console.WriteLine($"venues[{index} = {venus.Name}");
+                        //}
                     }
                 }
                 else if (Parsed(proceed) == 3)
                 {
                     // create method to add venue
-                    Console.WriteLine("You want to add a new venue, how ambitious!");
+                    Console.WriteLine("You want to ADD a new venue, how ambitious!");
                 }
                 else
                 {
