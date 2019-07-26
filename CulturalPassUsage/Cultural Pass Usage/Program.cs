@@ -8,7 +8,6 @@ namespace Cultural_Pass_Usage
 {
     class Program
     {
-        //public static bool success = false;
         public static readonly string line = "------------------------------------------------------------------------------------------";
 
 
@@ -21,26 +20,25 @@ namespace Cultural_Pass_Usage
             // create variable for current directory + input file path
             string currentDirectory = Directory.GetCurrentDirectory();
             DirectoryInfo directory = new DirectoryInfo(currentDirectory);
-
             var fileName = Path.Combine(directory.FullName, "CulturalPassVenues2019.json");
 
-            // Deserialize data from JSON file into array of objects
+            // deserialize data from JSON file into array of Venue objects
             var venues = DeserializeVenues(fileName);
 
+            // figure out how many venues are in the list & create a counter to make a numbered list for menus
             int venueCount = venues.Count;
-            int counter = 1;
 
-            // printing out general info
+            // printing out prettyfied info on how many Venues are in the list
             PrintBoxTop();
             Console.WriteLine("|  There are *" + venueCount + "* venues participating this year:                                            |");
             PrintBoxBottom();
             Console.WriteLine();
 
-            // create a numerical list of venues -- might be able to do with just using ID?
+            // create a numerical list of venues using the counter, not IDs
             foreach (var venue in venues)
             {
-                Console.WriteLine(counter + ". " + venue.Name);
-                counter++;
+                Console.WriteLine($"{venue.ID}. {venue.Name}");
+                //counter++;
             }
 
             Console.WriteLine();
@@ -51,47 +49,38 @@ namespace Cultural_Pass_Usage
             // using Find method to search for input match in the List of Venues
             Venue result = FindByID(venues, parsedInput);
 
-
-            var outputFileName = Path.Combine(directory.FullName, "UpdatedCulturalPassVenues2019.json");
             if (result != null)
             {
                 DisplayResult(result);
 
                 // get user input to determine next action
-                Console.WriteLine("Would you like to: \n\t1. Modify this venue \n\t2. Remove this venue \n\t3. Add another venue\n\t4. <ENTER> (or any other key) Exit\n");
+                Console.WriteLine("Would you like to: \n\t1. Modify this venue \n\t2. Remove this venue \n\t3. Add another venue\n\t4. Exit");
                 string proceed = Console.ReadLine();
+
+                //------------------------------------------
+                // BEGIN INTERACTING WITH DATA
+                // currently only have option to remove
+                // but options to add and modify are coming
+                //------------------------------------------
                 if (Parsed(proceed) == 1)
                 {
-                    Console.WriteLine($"You want to MODIFY {result.Name}");
                     // methods to modify venue
-                    // create array of properties, loop through them and call method on each
-                    // it would be easier to just delete things
+                    // this is a work in progress
+                    Console.WriteLine($"You want to MODIFY {result.Name}.");
+
+                    //Console.WriteLine("Unfortunately that's not fully functional yet. :'(");
+                    //string newInput = MainMenu(venues);
+                    //Venue newResult = FindByID(venues, Parsed(newInput));
+                    //if (newResult != null)
+                    //{ DisplayResult(newResult); }
+
+                    
                 }
                 else if (Parsed(proceed) == 2)
                 {
-                    // create method to delete venue
-                    Console.Write($"You want to delete {result.Name}; are you sure? Y/N \t");
-                    string deleteConf = Console.ReadLine();
-                    if(deleteConf.ToUpperInvariant() == "Y")
-                    {
-                        venues.Remove(new Venue() { ID = result.ID, Name = result.Name }) ;
+                    // confirm they really do want to delete the item, then delete and save or quit
+                    Delete(venues, result, parsedInput);
 
-                        Venue newResult = FindByID(venues, parsedInput);
-
-                        if(newResult != null)
-                        {
-                            Console.WriteLine("We still found that object, that's not good.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("SUCCESS! Object deleted. Venues now contains: ");
-                            foreach(Venue venue in venues)
-                            {
-                                Console.WriteLine("ID: {0} \tName: {1}", venue.ID, venue.Name);
-                            }
-                        }
-                        
-                    }
                 }
                 else if (Parsed(proceed) == 3)
                 {
@@ -102,6 +91,9 @@ namespace Cultural_Pass_Usage
                 {
                     Environment.Exit(0);
                 }
+
+                Save(venues, fileName);
+                
             }
             else
             {
@@ -134,6 +126,62 @@ namespace Cultural_Pass_Usage
             }
         }
 
+        public static string MainMenu(List<Venue> venues)
+        {
+            int venueCount = venues.Count;
+            int counter = 1;
+
+            // create a numerical list of venues, not necessarily always matching with ID
+            foreach (var venue in venues)
+            {
+                Console.WriteLine(counter + ". " + venue.Name);
+                counter++;
+            }
+
+            Console.WriteLine();
+            Console.Write("Enter the list number of the venue you would like to see:  ");
+            string input = Console.ReadLine();
+
+            return input;
+        }
+
+        public static void Save(List<Venue> venues, string fileName)
+        {
+            Console.Write("Save your changes?   Y/N: \t");
+            string saveChoice = Console.ReadLine();
+            if (saveChoice.ToUpperInvariant() == "Y")
+            {
+                SerializeVenueToFile(venues, fileName);
+                Console.WriteLine("Your changes have been successfully recorded. Goodbye!");
+                Environment.Exit(0);
+            }
+            else
+            {
+                Console.WriteLine("No changes have been made. \nThanks for using the program. Goodbye!");
+                Environment.Exit(0);
+            }
+        }
+        public static void Delete(List<Venue> venues, Venue result, int parsedInput)
+        {
+            Console.Write($"You want to delete {result.Name}; are you sure? Y/N \t");
+            string deleteConf = Console.ReadLine();
+            if (deleteConf.ToUpperInvariant() == "Y")
+            {
+                venues.Remove(new Venue() { ID = result.ID, Name = result.Name });
+
+                Venue newResult = FindByID(venues, parsedInput);
+
+                if (newResult != null)
+                {
+                    Console.WriteLine("We still found that object, that's not good.");
+                }
+                else
+                {
+                    Console.WriteLine("{0} was successfully deleted!\n", result.Name);
+                }
+
+            }
+        }
         public static Venue FindByID(List<Venue> venues, int parsedInput)
         {
             Venue result = venues.Find(
