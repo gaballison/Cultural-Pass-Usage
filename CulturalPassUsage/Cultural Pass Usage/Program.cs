@@ -34,16 +34,9 @@ namespace Cultural_Pass_Usage
             PrintBoxBottom();
             Console.WriteLine();
 
-            // create a numerical list of venues using the counter, not IDs
-            foreach (var venue in venues)
-            {
-                Console.WriteLine($"{venue.ID}. {venue.Name}");
-                //counter++;
-            }
-
-            Console.WriteLine();
-            Console.Write("Enter the list number of the venue you would like to see:  ");
-            string input = Console.ReadLine();
+            // generate a numbered list of Venue objects, ordered by Venue ID
+            // and save the user's selection in a variable
+            string input = MainMenu(venues);
             int parsedInput = Parsed(input);
 
             // using Find method to search for input match in the List of Venues
@@ -51,10 +44,11 @@ namespace Cultural_Pass_Usage
 
             if (result != null)
             {
-                DisplayResult(result);
+                // use the WriteDesc() method to generate a profile of the user's selected Venue
+                result.WriteDesc();
 
                 // get user input to determine next action
-                Console.WriteLine("Would you like to: \n\t1. Modify this venue \n\t2. Remove this venue \n\t3. Add another venue\n\t4. Exit");
+                Console.WriteLine("Would you like to: \n\t1. Remove this venue \n\t2. Exit");
                 string proceed = Console.ReadLine();
 
                 //------------------------------------------
@@ -64,28 +58,8 @@ namespace Cultural_Pass_Usage
                 //------------------------------------------
                 if (Parsed(proceed) == 1)
                 {
-                    // methods to modify venue
-                    // this is a work in progress
-                    Console.WriteLine($"You want to MODIFY {result.Name}.");
-
-                    //Console.WriteLine("Unfortunately that's not fully functional yet. :'(");
-                    //string newInput = MainMenu(venues);
-                    //Venue newResult = FindByID(venues, Parsed(newInput));
-                    //if (newResult != null)
-                    //{ DisplayResult(newResult); }
-
-                    
-                }
-                else if (Parsed(proceed) == 2)
-                {
                     // confirm they really do want to delete the item, then delete and save or quit
                     Delete(venues, result, parsedInput);
-
-                }
-                else if (Parsed(proceed) == 3)
-                {
-                    // create method to add venue
-                    Console.WriteLine("You want to ADD a new venue, how ambitious!");
                 }
                 else
                 {
@@ -128,16 +102,13 @@ namespace Cultural_Pass_Usage
 
         public static string MainMenu(List<Venue> venues)
         {
-            int venueCount = venues.Count;
-            int counter = 1;
-
             // create a numerical list of venues, not necessarily always matching with ID
             foreach (var venue in venues)
             {
-                Console.WriteLine(counter + ". " + venue.Name);
-                counter++;
+                Console.WriteLine($"{venue.ID}. {venue.Name}");
             }
 
+            // get and return user's selection
             Console.WriteLine();
             Console.Write("Enter the list number of the venue you would like to see:  ");
             string input = Console.ReadLine();
@@ -149,26 +120,34 @@ namespace Cultural_Pass_Usage
         {
             Console.Write("Save your changes?   Y/N: \t");
             string saveChoice = Console.ReadLine();
+
+            // if they choose to save, serialize and then quit
             if (saveChoice.ToUpperInvariant() == "Y")
             {
                 SerializeVenueToFile(venues, fileName);
-                Console.WriteLine("Your changes have been successfully recorded. Goodbye!");
+                Console.WriteLine("\nYour changes have been successfully recorded. Goodbye!");
                 Environment.Exit(0);
             }
+            // otherwise just quit
             else
             {
-                Console.WriteLine("No changes have been made. \nThanks for using the program. Goodbye!");
+                Console.WriteLine("\nNo changes have been made. \nThanks for using the program. Goodbye!");
                 Environment.Exit(0);
             }
         }
         public static void Delete(List<Venue> venues, Venue result, int parsedInput)
         {
+            // before deletion, confirm they actually WANT to delete
             Console.Write($"You want to delete {result.Name}; are you sure? Y/N \t");
             string deleteConf = Console.ReadLine();
+
+            
             if (deleteConf.ToUpperInvariant() == "Y")
             {
+                // if they confirm deletion, remove object with the maching ID and Name properties
                 venues.Remove(new Venue() { ID = result.ID, Name = result.Name });
 
+                // double check the object was actually deleted by searching for it by ID again
                 Venue newResult = FindByID(venues, parsedInput);
 
                 if (newResult != null)
@@ -184,6 +163,7 @@ namespace Cultural_Pass_Usage
         }
         public static Venue FindByID(List<Venue> venues, int parsedInput)
         {
+            // find and return the first object whose ID matches the user's selection
             Venue result = venues.Find(
                 delegate (Venue ex)
                 {
@@ -196,6 +176,7 @@ namespace Cultural_Pass_Usage
 
         public static int Parsed(string input)
         {
+            // check and make sure user's input is actually a positive integer
             if (Int32.TryParse(input, out int number))
             {
                 return number;
@@ -203,65 +184,6 @@ namespace Cultural_Pass_Usage
             return -1;
         }
 
-        private static void DisplayResult(Venue result)
-        {
-            Console.WriteLine();
-            result.WriteDesc();
-        }
-
-        //TODO: Add better input cleaning/verification for modification
-        public static void ModifyVenueProp(Venue inputObject, string propName)
-        {
-            Venue obj = new Venue();
-            Type t = obj.GetType();
-            Type y = inputObject.GetType();
-            PropertyInfo[] props = t.GetProperties();
-
-            //Console.WriteLine("Properties (N = {0}):", props.Length);
-            foreach (var prop in props)
-            {
-                var oldValue = prop.GetValue(obj);
-                prop.SetValue(obj, y.GetProperty(prop.Name).GetValue(inputObject));
-                var newValue = prop.GetValue(obj);
-                // Console.WriteLine($"{prop.Name} was {oldValue} and now is {newValue}");
-            }
-
-            string printPropName = null;
-
-            switch (propName)
-            {
-                case "AvailabilityDesc":
-                    printPropName = "Availability Description";
-                    break;
-                case "Youngest":
-                    printPropName = "Youngest Age";
-                    break;
-                case "Oldest":
-                    printPropName = "Oldest Age";
-                    break;
-                default:
-                    printPropName = propName;
-                    break;
-            }
-
-            Console.Write($"Enter a new {printPropName} (or hit enter to continue):  ");
-            string newProp = Console.ReadLine();
-            var oldProp = t.GetProperty(propName).GetValue(obj);
-            //ConsoleKeyInfo cki;
-            ConsoleKeyInfo temp = Console.ReadKey(true);
-            Console.TreatControlCAsInput = false;
-            if (temp.Key == ConsoleKey.Enter)
-            {
-                Console.WriteLine($"\nOld {printPropName}: {oldProp}\tNothing changed.");
-            }
-            else
-            {
-                t.GetProperty(propName).SetValue(obj, newProp);
-                var newPropVal = t.GetProperty(propName).GetValue(obj);
-                Console.WriteLine($"\nOld {printPropName}: {oldProp}\n\tNew value: {newPropVal}\n");
-            }
-
-        }
 
         public static void PrintBoxTop()
         {

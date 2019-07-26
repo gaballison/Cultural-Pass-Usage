@@ -66,15 +66,13 @@ namespace Cultural_Pass_Usage
         {
             string line = "------------------------------------------------------------------------------------------";
 
-            Console.WriteLine("");
             Console.WriteLine(line);
             Console.WriteLine($"#{ID}. {Name.ToUpperInvariant()} \n");
             Console.WriteLine($"Category: {Category} \n");
             Console.WriteLine($"\"{Description}\" \n");
             Console.WriteLine($"Availability:  {AvailabilityDesc} \n");
-            Console.WriteLine($"Recommended for ages {Youngest} to {Oldest} \n");
+            Console.WriteLine($"Recommended for ages {Youngest} to {Oldest}");
             Console.WriteLine(line);
-            Console.WriteLine();
         }
 
         
